@@ -61,6 +61,10 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->exceptSlugs();
         
+        // 语言包
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../resource/lang');
+        
+        // 路由
         $this->loadRoutesFrom(__DIR__ . '/../resource/route/admin.php');
     }
     

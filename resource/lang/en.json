@@ -1,0 +1,8 @@
+{
+    "获取失败": "get fail",
+    "日志文件不存在": "log file not exists",
+    "日志文件不可操作": "log file dont use",
+    "日志文件删除失败": "log file delete fail",
+    "日志文件删除成功": "log file delete success",
+    "日志文件不能为空": "log file dont empty"
+}
