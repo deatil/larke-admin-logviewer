@@ -1,0 +1,43 @@
+{
+    "name": "larke/log-viewer",
+    "description": "The log-viewer is a larke-admin'extension.",
+    "keywords": [
+        "lake",
+        "larke",
+        "rsa",
+        "eddsa",
+        "ecdsa",
+        "sign-cert",
+        "admin",
+        "larke-admin",
+        "larke-admin-logviewer"
+    ],
+    "homepage": "https://github.com/deatil/larke-admin-logviewer",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "deatil",
+            "email": "deatil@github.com",
+            "homepage": "https://github.com/deatil",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.3",
+        "lake/larke-admin":"1.1.*",
+        "lake/larke-admin-frontend":"1.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Larke\\Admin\\LogViewer\\": "src"
+        }
+    },
+    "extra" : {
+        "laravel" : {
+            "providers" : [
+                "Larke\\Admin\\LogViewer\\ServiceProvider"
+            ]
+        }
+    }
+}
