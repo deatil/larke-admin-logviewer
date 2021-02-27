@@ -57,8 +57,31 @@
                 </template>
               </el-table-column>
             </el-table>
-          </div>
 
+            <div class="file-pagination" v-if="file.pagetotal > 1">
+              <el-button
+                v-waves 
+                type="primary"
+                style="width:45%;"
+                size="mini"
+                :disabled="!(file.listQuery.page > 1)"
+                @click="handleFilePrev"
+              >
+                上一页
+              </el-button>  
+
+              <el-button
+                v-waves 
+                type="primary"
+                style="width:45%;"
+                size="mini"
+                :disabled="!(file.listQuery.page < file.pagetotal)"
+                @click="handleFileNext"
+              >
+                下一页
+              </el-button> 
+            </div>
+          </div>
         </el-card>
       </el-col>
 
@@ -73,22 +96,23 @@
               <el-row :gutter="0" class="panel-group">
                 <el-col :xs="18" :sm="18" :lg="18" class="card-panel-col">
                   <div class="log-file-detail-item">
-                    文件：{{ file.detail.name }}
+                    文件：<span>{{ file.detail.name }}</span>
                   </div>
                   <div class="log-file-detail-item">
-                    大小：{{ file.detail.size }}
+                    大小：<span>{{ file.detail.size }}</span>
                   </div>
                   <div class="log-file-detail-item">
-                    最后更新：{{ file.detail.time }}
+                    最后更新：<span>{{ file.detail.time }}</span>
                   </div>
                 </el-col>
-                <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col">
+
+                <el-col :xs="6" :sm="6" :lg="6" class="card-panel-col" v-if="log.listQuery.file != ''">
                   <div class="log-file-action-item">
                     <el-button
                       v-waves 
-                      class="filter-item"
                       type="danger"
                       style="width:100px;"
+                      size="mini"
                       :disabled="!checkPermission(['larke-admin.log-viewer.delete'])"
                       @click="handleDeleteFile(log.listQuery.file, $event)"
                     >
@@ -99,9 +123,9 @@
                   <div class="log-file-action-item">
                     <el-button
                       v-waves 
-                      class="filter-item"
                       type="success"
                       style="width:100px;"
+                      size="mini"
                       :disabled="!checkPermission(['larke-admin.log-viewer.download'])"
                        @click="handleDownloadFile(log.listQuery.file, $event)"
                     >
@@ -159,6 +183,30 @@
                 </el-table>
               </div>
 
+              <div class="log-pagination" v-if="log.prev || log.next">
+                <el-button
+                  v-waves 
+                  type="primary"
+                  style="width:100px;"
+                  size="mini"
+                  :disabled="!log.prev"
+                  @click="handleLogPrev"
+                >
+                  上一页
+                </el-button>  
+
+                <el-button
+                  v-waves 
+                  type="primary"
+                  style="width:100px;"
+                  size="mini"
+                  :disabled="!log.next"
+                  @click="handleLogNext"
+                >
+                  下一页
+                </el-button> 
+              </div>
+
             </div>
           </div>
         </el-card>
@@ -173,6 +221,7 @@
 
 <script>
 import waves from '@/directive/waves'
+import { scrollTo } from '@/utils/scroll-to'
 import Pagination from '@/components/Pagination'
 import permission from '@/directive/permission/index.js' // 权限判断指令
 import checkPermission from '@/utils/permission' // 权限判断函数
@@ -210,6 +259,7 @@ export default {
       file: {
         list: null,
         total: 0,
+        pagetotal: 0,
         listLoading: true,
         listQuery: {
           searchword: '',
@@ -248,10 +298,10 @@ export default {
   },
   methods: {
     checkPermission,
-    getFileList() {
+    async getFileList() {
       this.file.listLoading = true
 
-      getFiles({
+      await getFiles({
         keywords: this.file.listQuery.searchword,
         order: this.file.listQuery.order,
         page: this.file.listQuery.page,
@@ -259,13 +309,14 @@ export default {
       }).then(response => {
         this.file.list = response.data.list
         this.file.total = response.data.total
+        this.file.pagetotal = parseInt(this.file.total / this.file.listQuery.pagesize)
         this.file.listLoading = false
       })
     },
-    getLogList() {
+    async getLogList() {
       this.log.listLoading = true
 
-      getLogs({
+      await getLogs({
         file: this.log.listQuery.file,
         offset: this.log.listQuery.offset,
       }).then(response => {
@@ -275,6 +326,16 @@ export default {
 
         this.log.listLoading = false
       })
+    },
+    handleFilePrev() {
+      this.file.listQuery.page -= 1
+      this.getFileList()
+      scrollTo(0, 800)
+    },
+    handleFileNext() {
+      this.file.listQuery.page += 1
+      this.getFileList()
+      scrollTo(0, 800)
     },
     showFileLog(event, row, index) {
       this.file.detail.name = row.name
@@ -316,6 +377,16 @@ export default {
           type: 'text'
         },
       ]
+    },
+    handleLogPrev() {
+      this.log.listQuery.offset = this.log.prev
+      this.getLogList()
+      scrollTo(0, 800)
+    },
+    handleLogNext() {
+      this.log.listQuery.offset = this.log.next
+      this.getLogList()
+      scrollTo(0, 800)
     },
     handleDeleteFile(file) {
       if (file == '') {
@@ -362,6 +433,10 @@ export default {
 </script>
 
 <style scoped>
+.file-pagination {
+  margin-top: 10px;
+  text-align: center;
+}
 .log-file {
   cursor: pointer;
 }
@@ -376,7 +451,14 @@ export default {
   font-size: 15px;
   color: #3c3f63;
 }
+.log-file-detail-item span {
+  font-weight: bold;
+}
 .log-file-action-item {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.log-pagination {
+  margin-top: 10px;
 }
 </style>

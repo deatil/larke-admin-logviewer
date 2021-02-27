@@ -32,7 +32,7 @@ class Viewer extends BaseController
      */
     public function files(Request $request)
     {
-        $keywords = (int) request()->input('keywords', '');
+        $keywords = (string) request()->input('keywords', '');
         $order = (string) request()->input('order', 'time');
         
         // 分页
@@ -60,11 +60,11 @@ class Viewer extends BaseController
             ->values()
             ->toArray();
         
-        $total = count(collect($files)->chunk($pagesize));
+        $total = count(collect($files)->toArray());
         
         $data = [
             'list' => $list, // 数据
-            'total' => $total, // 页码数量
+            'total' => $total, // 数量
             'page' => $page, // 当前页码
             'pagesize' => $pagesize, // 每页数量
         ];

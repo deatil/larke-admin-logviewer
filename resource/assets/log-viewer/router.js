@@ -12,7 +12,7 @@ const route = {
     roles: [
       'larke-admin.log-viewer.files',
     ]
-  },  
+  }, 
   children: [
     {
       path: '/log-viewer/files',
