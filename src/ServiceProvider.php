@@ -18,9 +18,10 @@ class ServiceProvider extends BaseServiceProvider
         'title' => '日志查看器',
         'description' => 'laravel日志查看扩展',
         'keywords' => [
-            'rsa',
-            'ecdsa',
-            'eddsa',
+            'larke',
+            'larke-admin',
+            'log',
+            'viewer',
             'logviewer',
         ],
         'homepage' => 'https://github.com/deatil/larke-admin-logviewer',

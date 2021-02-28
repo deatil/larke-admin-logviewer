@@ -2,15 +2,12 @@
     "name": "larke/log-viewer",
     "description": "The log-viewer is a larke-admin'extension.",
     "keywords": [
-        "lake",
         "larke",
-        "rsa",
-        "eddsa",
-        "ecdsa",
-        "sign-cert",
+        "log",
+        "viewer",
+        "log-viewer",
         "admin",
-        "larke-admin",
-        "larke-admin-logviewer"
+        "larke-admin"
     ],
     "homepage": "https://github.com/deatil/larke-admin-logviewer",
     "type": "library",
