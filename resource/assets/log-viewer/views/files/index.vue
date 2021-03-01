@@ -148,13 +148,13 @@
                   style="width: 100%"
                 >
                   <el-table-column width="160px" label="时间">
-                    <template slot-scope="scope">                      
+                    <template slot-scope="scope">
                         {{ scope.row.time }}
                     </template>
                   </el-table-column>
 
                   <el-table-column width="85px" align="center" label="等级">
-                    <template slot-scope="scope">                      
+                    <template slot-scope="scope">
                       <el-tag :type="scope.row.level | levelFilter" size="mini">
                         {{ scope.row.level }}
                       </el-tag>
@@ -162,13 +162,13 @@
                   </el-table-column>
 
                   <el-table-column width="80px" align="center" label="存储">
-                    <template slot-scope="scope">                      
+                    <template slot-scope="scope">
                       {{ scope.row.env }}
                     </template>
                   </el-table-column>
 
                   <el-table-column label="内容">
-                    <template slot-scope="scope">                      
+                    <template slot-scope="scope">
                       {{ scope.row.info }}
                     </template>
                   </el-table-column>
