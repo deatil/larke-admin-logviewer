@@ -338,6 +338,10 @@ export default {
       scrollTo(0, 800)
     },
     showFileLog(event, row, index) {
+      if (this.file.detail.name == row.name) {
+        return ;
+      }
+
       this.file.detail.name = row.name
       this.file.detail.size = row.format_size
       this.file.detail.time = row.time
@@ -373,8 +377,8 @@ export default {
         },
         {
           name: '调试',
-          content: row.trace,
-          type: 'text'
+          content: row.trace.replace(/[\n\r]/g, "<br/>"),
+          type: 'html'
         },
       ]
     },
