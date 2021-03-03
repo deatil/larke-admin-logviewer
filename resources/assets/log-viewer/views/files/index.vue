@@ -377,7 +377,7 @@ export default {
         },
         {
           name: '调试',
-          content: row.trace.replace(/[\n\r]/g, "<br/>"),
+          content: row.trace.replace(/[\n]/g, "<br/>"),
           type: 'html'
         },
       ]

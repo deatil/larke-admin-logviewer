@@ -16,7 +16,7 @@ class ServiceProvider extends BaseServiceProvider
     public $info = [
         'name' => 'larke/log-viewer',
         'title' => '日志查看器',
-        'description' => 'laravel日志查看扩展',
+        'description' => 'laravel的日志查看器',
         'keywords' => [
             'larke',
             'larke-admin',
@@ -32,7 +32,7 @@ class ServiceProvider extends BaseServiceProvider
                 'homepage' => 'https://github.com/deatil', 
             ],
         ],
-        'version' => '1.0.0',
+        'version' => '1.0.1',
         'adaptation' => '1.1.*',
         'require' => [],
     ];
@@ -63,10 +63,10 @@ class ServiceProvider extends BaseServiceProvider
         $this->exceptSlugs();
         
         // 语言包
-        $this->loadJsonTranslationsFrom(__DIR__ . '/../resource/lang');
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../resources/lang');
         
         // 路由
-        $this->loadRoutesFrom(__DIR__ . '/../resource/route/admin.php');
+        $this->loadRoutesFrom(__DIR__ . '/../resources/route/admin.php');
     }
     
     /**
@@ -74,16 +74,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function exceptSlugs()
     {
-        $authenticateExcepts = config('larkeadmin.auth.authenticate_excepts', []);
-        $authenticateExcepts[] = 'larke-admin.log-viewer.download';
-        
-        $permissionExcepts = config('larkeadmin.auth.permission_excepts', []);
-        $permissionExcepts[] = 'larke-admin.log-viewer.download';
-        
-        config([
-            'larkeadmin.auth.authenticate_excepts' => $authenticateExcepts,
-            'larkeadmin.auth.permission_excepts' => $permissionExcepts,
-        ]);
+        larke_admin_authenticate_excepts(['larke-admin.log-viewer.download']);
+        larke_admin_permission_excepts(['larke-admin.log-viewer.download']);
     }
     
     /**
@@ -92,7 +84,7 @@ class ServiceProvider extends BaseServiceProvider
     protected function assetsPublishes()
     {
         $this->publishes([
-            __DIR__.'/../resource/assets/log-viewer' => public_path('extension/log-viewer'),
+            __DIR__.'/../resources/assets/log-viewer' => public_path('extension/log-viewer'),
         ], 'larke-admin-log-viewer-assets');
         
         Artisan::call('vendor:publish', [
@@ -105,7 +97,7 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function install()
     {
-        $rules = include __DIR__ . '/../resource/rules/rules.php';
+        $rules = include __DIR__ . '/../resources/rules/rules.php';
         
         // 添加权限
         Rule::create($rules);

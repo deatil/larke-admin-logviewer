@@ -8,7 +8,7 @@ const route = {
   name: 'LogViewer',
   meta: {
     title: 'LogViewer',
-    icon: 'el-icon-s-management',
+    icon: 'el-icon-collection',
     roles: [
       'larke-admin.log-viewer.files',
     ]
