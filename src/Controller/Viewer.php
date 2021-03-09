@@ -160,26 +160,14 @@ class Viewer extends BaseController
         
         // 具体日志文件
         $logViewer = new LogViewer();
-        $file = $logViewer
+        $logFile = $logViewer
             ->withPath(storage_path('logs'))
             ->getFilePath($file);
         
-        if (! File::exists($file) || ! File::isFile($file)) {
+        if (! File::exists($logFile) || ! File::isFile($logFile)) {
             return $this->error(__('日志文件不存在'));
         }
         
-        // 文件内容
-        $data = File::get($file);
-        
-        // 文件名称
-        $name = $request->input('file');
-        
-        $headers = [
-            'Content-Type' => 'application/text',
-        ];
-        
-        return Response::streamDownload(function () use($data) {
-            echo $data;
-        }, $name, $headers);
+        return Response::download($logFile, $file);
     }
 }
