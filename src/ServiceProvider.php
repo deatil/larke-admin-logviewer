@@ -89,6 +89,7 @@ class ServiceProvider extends BaseServiceProvider
         
         Artisan::call('vendor:publish', [
             '--tag' => 'larke-admin-log-viewer-assets',
+            '--force' => true,
         ]);
     }
     
