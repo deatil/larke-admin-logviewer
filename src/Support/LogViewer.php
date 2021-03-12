@@ -181,9 +181,9 @@ class LogViewer
                 $output = substr($output, 0, $strpos);
                 $this->pageOffset['end'] -= $_;
             }
-
-            // 从后往前读,下一页
         } else {
+            // 从后往前读,下一页
+            
             $output = '';
 
             $this->pageOffset['end'] = ftell($f);
