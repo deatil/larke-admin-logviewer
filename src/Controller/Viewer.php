@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File;
 
 use Larke\Admin\LogViewer\Support\LogViewer;
+use Larke\Admin\LogViewer\Support\FileViewer;
 use Larke\Admin\Http\Controller as BaseController;
 
 /**
@@ -92,15 +93,15 @@ class Viewer extends BaseController
             return $this->error(__('获取失败'));
         }
         
-        $logViewer = new LogViewer();
-        $list = $logViewer
+        $fileViewer = new FileViewer();
+        $list = $fileViewer
             ->withPath(storage_path('logs'))
             ->fetch($file, $offset);
         
         $data = [
             'list' => $list,
-            'prev' => $logViewer->getPrevPage($file),
-            'next' => $logViewer->getNextPage(),
+            'prev' => $fileViewer->getPrevPage(),
+            'next' => $fileViewer->getNextPage($file),
         ];
         
         return $this->success(__('获取成功'), $data);
