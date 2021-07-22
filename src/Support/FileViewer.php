@@ -15,6 +15,20 @@ class FileViewer
      * @var string
      */
     protected $path;
+    
+    /**
+     * 文件
+     *
+     * @var string
+     */
+    protected $file;
+
+    /**
+     * 文件大小
+     *
+     * @var int
+     */
+    protected $filesize = 0;
 
     /**
      * 已读取大小
@@ -43,47 +57,70 @@ class FileViewer
     }
 
     /**
+     * 设置文件
+     *
+     * @param null $file
+     */
+    public function withFile($file)
+    {
+        $this->file = $file;
+        
+        return $this;
+    }
+
+    /**
      * 获取文件
      *
      * @param null $file
      */
-    public function getFilePath($file = null)
+    public function getFile($file = null)
     {
         $path = $this->path;
+        if (empty($file)) {
+            $file = $this->file;
+        }
+        
         return $path.($file ? DIRECTORY_SEPARATOR . $file : $file);
     }
 
     /**
-     * 上一页
+     * 读取大小
      *
-     * @return bool|string
+     * @return int
      */
-    public function getPrevPage()
+    public function getReadSize()
     {
-        if ($this->haveReadSize < $this->readSize && $this->haveReadSize > 0) {
-            return 0;
-        }
-        
-        if (($this->haveReadSize - $this->readSize) < 0) {
-            return false;
-        }
-
-        return $this->haveReadSize - $this->readSize;
+        return $this->readSize;
     }
 
     /**
-     * 下一页
+     * 当前读取大小
      *
-     * @return bool|string
+     * @return int
      */
-    public function getNextPage($file)
+    public function getHaveReadSize()
     {
-        $filePath = $this->getFilePath($file);
-        if (($this->haveReadSize + $this->readSize) >= filesize($filePath)) {
-            return false;
-        }
+        return (int) $this->haveReadSize;
+    }
 
-        return $this->haveReadSize + $this->readSize;
+    /**
+     * 文件大小
+     *
+     * @return int
+     */
+    public function getFilesize()
+    {
+        return $this->filesize;
+    }
+
+    /**
+     * 分页总数
+     *
+     * @return int
+     */
+    public function getPageTotal()
+    {
+        return ceil($this->filesize / $this->readSize);
     }
 
     /**
@@ -93,12 +130,16 @@ class FileViewer
      * @param int $seek
      * @return array
      */
-    public function fetch($file, $seek = 0) 
+    public function fetch($seek = 0) 
     { 
-        $filename = $this->getFilePath($file);
+        $filename = $this->getFile();
         
         // 文件大小
-        $filesize = filesize($filename);
+        $filesize = $this->filesize = filesize($filename);
+        
+        if ($seek < 0) {
+            $seek = 0;
+        }
         
         $readSize = $this->readSize;
         if ($seek + $readSize > $filesize) {
@@ -153,8 +194,6 @@ class FileViewer
         }
 
         unset($logs);
-
-        rsort($parsed);
 
         return $parsed;
     }

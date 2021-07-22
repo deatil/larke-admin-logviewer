@@ -183,13 +183,24 @@
                 </el-table>
               </div>
 
-              <div class="log-pagination" v-if="log.prev || log.next">
+              <div class="log-pagination" v-if="log.filesize > log.readsize">
                 <el-button
                   v-waves 
                   type="primary"
                   style="width:100px;"
                   size="mini"
-                  :disabled="!log.prev"
+                  :disabled="log.havesize <= 0"
+                  @click="handleLogStart"
+                >
+                  首页
+                </el-button>  
+
+                <el-button
+                  v-waves 
+                  type="primary"
+                  style="width:100px;"
+                  size="mini"
+                  :disabled="log.havesize <= 0"
                   @click="handleLogPrev"
                 >
                   上一页
@@ -200,10 +211,21 @@
                   type="primary"
                   style="width:100px;"
                   size="mini"
-                  :disabled="!log.next"
+                  :disabled="log.havesize + log.readsize >= log.filesize"
                   @click="handleLogNext"
                 >
                   下一页
+                </el-button> 
+
+                <el-button
+                  v-waves 
+                  type="primary"
+                  style="width:100px;"
+                  size="mini"
+                  :disabled="log.havesize + log.readsize >= log.filesize"
+                  @click="handleLogEnd"
+                >
+                  末页
                 </el-button> 
               </div>
 
@@ -279,8 +301,9 @@ export default {
       },
       log: {
         list: null,
-        prev: null,
-        next: null,
+        havesize: 0,
+        filesize: 0,
+        readsize: 0,
         listLoading: false,
         listQuery: {
           file: '',
@@ -321,8 +344,9 @@ export default {
         offset: this.log.listQuery.offset,
       }).then(response => {
         this.log.list = response.data.list
-        this.log.prev = response.data.prev
-        this.log.next = response.data.next
+        this.log.havesize = response.data.havesize
+        this.log.readsize = response.data.readsize
+        this.log.filesize = response.data.filesize
 
         this.log.listLoading = false
       })
@@ -382,13 +406,23 @@ export default {
         },
       ]
     },
+    handleLogStart() {
+      this.log.listQuery.offset = 0
+      this.getLogList()
+      scrollTo(0, 800)
+    },
     handleLogPrev() {
-      this.log.listQuery.offset = this.log.prev
+      this.log.listQuery.offset = this.log.havesize - this.log.readsize
       this.getLogList()
       scrollTo(0, 800)
     },
     handleLogNext() {
-      this.log.listQuery.offset = this.log.next
+      this.log.listQuery.offset = this.log.havesize + this.log.readsize
+      this.getLogList()
+      scrollTo(0, 800)
+    },
+    handleLogEnd() {
+      this.log.listQuery.offset = this.log.filesize - this.log.readsize
       this.getLogList()
       scrollTo(0, 800)
     },

@@ -96,12 +96,14 @@ class Viewer extends BaseController
         $fileViewer = new FileViewer();
         $list = $fileViewer
             ->withPath(storage_path('logs'))
-            ->fetch($file, $offset);
+            ->withFile($file)
+            ->fetch($offset);
         
         $data = [
             'list' => $list,
-            'prev' => $fileViewer->getPrevPage(),
-            'next' => $fileViewer->getNextPage($file),
+            'havesize' => $fileViewer->getHaveReadSize(),
+            'readsize' => $fileViewer->getReadSize(),
+            'filesize' => $fileViewer->getFilesize(),
         ];
         
         return $this->success(__('获取成功'), $data);
