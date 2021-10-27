@@ -4,7 +4,7 @@ return [
     'title' => '日志查看器',
     'url' => '#',
     'method' => 'OPTIONS',
-    'slug' => $this->slug,
+    'slug' => $slug,
     'description' => '用于查看laravel生成的日志',
     'children' => [
         [

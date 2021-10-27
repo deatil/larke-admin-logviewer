@@ -32,7 +32,7 @@ class ServiceProvider extends BaseServiceProvider
                 'homepage' => 'https://github.com/deatil', 
             ],
         ],
-        'version' => '1.0.3',
+        'version' => '1.0.5',
         'adaptation' => '^1.1',
         'require' => [],
     ];
@@ -96,6 +96,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function install()
     {
+        $slug = $this->slug;
+        
         $rules = include __DIR__ . '/../resources/rules/rules.php';
         
         // 添加权限
