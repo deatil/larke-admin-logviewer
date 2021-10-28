@@ -493,8 +493,8 @@ export default {
   font-weight: bold;
 }
 .log-file-action-item {
-  margin-bottom: 10px;
-  text-align: center;
+  margin: 5px 10px 10px 0;
+  text-align: right;
 }
 .log-pagination {
   margin-top: 10px;
