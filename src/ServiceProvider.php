@@ -5,7 +5,9 @@ declare (strict_types = 1);
 namespace Larke\Admin\LogViewer;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Event;
 
+use Larke\Admin\Event as AdminEvent;
 use Larke\Admin\Facade\Extension;
 use Larke\Admin\Extension\Rule;
 use Larke\Admin\Extension\ServiceProvider as BaseServiceProvider;
@@ -32,7 +34,7 @@ class ServiceProvider extends BaseServiceProvider
                 'homepage' => 'https://github.com/deatil', 
             ],
         ],
-        'version' => '1.0.5',
+        'version' => '1.1.0',
         'adaptation' => '^1.1',
         'require' => [],
     ];
@@ -51,6 +53,9 @@ class ServiceProvider extends BaseServiceProvider
     {
         // 扩展注册
         Extension::extend($this->info['name'], __CLASS__);
+        
+        // 事件
+        $this->bootListeners();
     }
     
     /**
@@ -92,9 +97,68 @@ class ServiceProvider extends BaseServiceProvider
     }
     
     /**
+     * 监听器
+     */
+    public function bootListeners()
+    {
+        $thiz = $this;
+        
+        // 安装后
+        Event::listen(function (AdminEvent\ExtensionInstall $event) use($thiz) {
+            $name = $event->name;
+            $info = $event->info;
+            
+            if ($name == $thiz->info["name"]) {
+                $thiz->install();
+            }
+        });
+        
+        // 卸载后
+        Event::listen(function (AdminEvent\ExtensionUninstall $event) use($thiz) {
+            $name = $event->name;
+            $info = $event->info;
+            
+            if ($name == $thiz->info["name"]) {
+                $thiz->uninstall();
+            }
+        });
+        
+        // 更新后
+        Event::listen(function (AdminEvent\ExtensionUpgrade $event) use($thiz) {
+            $name = $event->name;
+            $oldInfo = $event->oldInfo;
+            $newInfo = $event->newInfo;
+            
+            if ($name == $thiz->info["name"]) {
+                $thiz->upgrade();
+            }
+        });
+        
+        // 启用后
+        Event::listen(function (AdminEvent\ExtensionEnable $event) use($thiz) {
+            $name = $event->name;
+            $info = $event->info;
+            
+            if ($name == $thiz->info["name"]) {
+                $thiz->enable();
+            }
+        });
+        
+        // 禁用后
+        Event::listen(function (AdminEvent\ExtensionDisable $event) use($thiz) {
+            $name = $event->name;
+            $info = $event->info;
+            
+            if ($name == $thiz->info["name"]) {
+                $thiz->disable();
+            }
+        });
+    }
+    
+    /**
      * 安装后
      */
-    public function install()
+    protected function install()
     {
         $slug = $this->slug;
         
@@ -112,7 +176,7 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * 卸载后
      */
-    public function uninstall()
+    protected function uninstall()
     {
         // 删除权限
         Rule::delete($this->slug);
@@ -124,13 +188,13 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * 更新后
      */
-    public function upgrade()
+    protected function upgrade()
     {}
     
     /**
      * 启用后
      */
-    public function enable()
+    protected function enable()
     {
         // 启用权限
         Rule::enable($this->slug);
@@ -142,7 +206,7 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * 禁用后
      */
-    public function disable()
+    protected function disable()
     {
         // 禁用权限
         Rule::disable($this->slug);
