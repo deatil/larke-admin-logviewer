@@ -5,17 +5,18 @@ declare (strict_types = 1);
 namespace Larke\Admin\LogViewer;
 
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Event;
 
-use Larke\Admin\Event as AdminEvent;
-use Larke\Admin\Facade\Extension;
+use Larke\Admin\Extension\Info;
 use Larke\Admin\Extension\Rule;
 use Larke\Admin\Extension\ServiceProvider as BaseServiceProvider;
 use Larke\Admin\Frontend\Support\Menu;
 
 class ServiceProvider extends BaseServiceProvider
 {
-    public $info = [
+    /**
+     * 扩展信息
+     */
+    protected $info = [
         'name' => 'larke/log-viewer',
         'title' => '日志查看器',
         'description' => 'laravel的日志查看器',
@@ -36,13 +37,12 @@ class ServiceProvider extends BaseServiceProvider
         ],
         'version' => '1.1.0',
         'adaptation' => '^1.1',
-        'require' => [],
     ];
     
     /**
      * 扩展图标
      */
-    public $icon = __DIR__ . '/../icon.png';
+    protected $icon = __DIR__ . '/../icon.png';
     
     protected $slug = 'larke-admin.extension.log-viewer';
     
@@ -52,7 +52,14 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         // 扩展注册
-        Extension::extend($this->info['name'], __CLASS__);
+        $this->withExtension(
+            $this->info['name'], 
+            $this->withExtensionInfo(
+                __CLASS__, 
+                $this->info, 
+                $this->icon
+            )
+        );
         
         // 事件
         $this->bootListeners();
@@ -104,51 +111,35 @@ class ServiceProvider extends BaseServiceProvider
         $thiz = $this;
         
         // 安装后
-        Event::listen(function (AdminEvent\ExtensionInstall $event) use($thiz) {
-            $name = $event->name;
-            $info = $event->info;
-            
+        $this->onInatll(function ($name, $info) use($thiz) {
             if ($name == $thiz->info["name"]) {
                 $thiz->install();
             }
         });
         
         // 卸载后
-        Event::listen(function (AdminEvent\ExtensionUninstall $event) use($thiz) {
-            $name = $event->name;
-            $info = $event->info;
-            
+        $this->onUninstall(function ($name, $info) use($thiz) {
             if ($name == $thiz->info["name"]) {
                 $thiz->uninstall();
             }
         });
         
         // 更新后
-        Event::listen(function (AdminEvent\ExtensionUpgrade $event) use($thiz) {
-            $name = $event->name;
-            $oldInfo = $event->oldInfo;
-            $newInfo = $event->newInfo;
-            
+        $this->onUpgrade(function ($name, $oldInfo, $newInfo) use($thiz) {
             if ($name == $thiz->info["name"]) {
                 $thiz->upgrade();
             }
         });
         
         // 启用后
-        Event::listen(function (AdminEvent\ExtensionEnable $event) use($thiz) {
-            $name = $event->name;
-            $info = $event->info;
-            
+        $this->onEnable(function ($name, $info) use($thiz) {
             if ($name == $thiz->info["name"]) {
                 $thiz->enable();
             }
         });
         
         // 禁用后
-        Event::listen(function (AdminEvent\ExtensionDisable $event) use($thiz) {
-            $name = $event->name;
-            $info = $event->info;
-            
+        $this->onDisable(function ($name, $info) use($thiz) {
             if ($name == $thiz->info["name"]) {
                 $thiz->disable();
             }
