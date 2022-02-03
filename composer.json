@@ -22,8 +22,8 @@
     ],
     "require": {
         "php": "^7.3",
-        "lake/larke-admin":"1.1.*",
-        "lake/larke-admin-frontend":"1.0.*"
+        "lake/larke-admin":"1.2.*",
+        "lake/larke-admin-frontend":"1.1.*"
     },
     "autoload": {
         "psr-4": {
