@@ -15,6 +15,12 @@ use Larke\Admin\Http\Controller as BaseController;
 /**
  * 查看器
  *
+ * @title 日志查看器
+ * @desc 用于查看laravel生成的日志
+ * @order 155
+ * @auth true
+ * @slug larke-admin.ext.log-viewer
+ *
  * @create 2021-2-5
  * @author deatil
  */
@@ -27,7 +33,7 @@ class Viewer extends BaseController
      * @desc 日志文件列表
      * @order 160
      * @auth true
-     * @parent larke-admin.extension.log-viewer
+     * @parent larke-admin.ext.log-viewer
      *
      * @return Response
      */
@@ -80,7 +86,7 @@ class Viewer extends BaseController
      * @desc 日志列表
      * @order 161
      * @auth true
-     * @parent larke-admin.extension.log-viewer
+     * @parent larke-admin.ext.log-viewer
      *
      * @return Response
      */
@@ -116,7 +122,7 @@ class Viewer extends BaseController
      * @desc 删除日志
      * @order 163
      * @auth true
-     * @parent larke-admin.extension.log-viewer
+     * @parent larke-admin.ext.log-viewer
      *
      * @return Response
      */
@@ -150,7 +156,7 @@ class Viewer extends BaseController
      * @desc 下载日志文件
      * @order 165
      * @auth true
-     * @parent larke-admin.extension.log-viewer
+     * @parent larke-admin.ext.log-viewer
      *
      * @return Response
      */
