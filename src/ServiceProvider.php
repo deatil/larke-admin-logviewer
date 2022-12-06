@@ -6,10 +6,9 @@ namespace Larke\Admin\LogViewer;
 
 use Illuminate\Support\Facades\Artisan;
 
-use Larke\Admin\Extension\Info;
 use Larke\Admin\Extension\Rule;
+use Larke\Admin\Extension\Menu;
 use Larke\Admin\Extension\ServiceProvider as BaseServiceProvider;
-use Larke\Admin\Frontend\Support\Menu;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -35,8 +34,8 @@ class ServiceProvider extends BaseServiceProvider
                 'homepage' => 'https://github.com/deatil', 
             ],
         ],
-        'version' => '1.3.0',
-        'adaptation' => '>=1.3.5',
+        'version' => '1.4.0',
+        'adaptation' => '>=1.4.0',
     ];
     
     /**
