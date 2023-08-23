@@ -6,7 +6,7 @@ namespace Larke\Admin\LogViewer\Support;
 
 use Symfony\Component\Finder\Finder;
 
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\File;
 
 /**
@@ -22,6 +22,13 @@ class LogViewer
     protected $path;
 
     /**
+     * The timezone the date should be evaluated on.
+     *
+     * @var \DateTimeZone|string
+     */
+    protected $timezone;
+
+    /**
      * Start and end offset in current page.
      *
      * @var array
@@ -30,15 +37,40 @@ class LogViewer
         'start' => 0,
         'end' => 0,
     ];
+    
+    /**
+     * 实例化
+     *
+     * @param  string|null $path
+     * @param  \DateTimeZone|string|null $timezone
+     * @return void
+     */
+    public function __construct($path = null, $timezone = null)
+    {
+        $this->path = $path;
+        $this->timezone = $timezone;
+    }
 
     /**
      * 设置目录
      *
-     * @param null $file
+     * @param string|null $path
      */
     public function withPath($path)
     {
         $this->path = $path;
+        
+        return $this;
+    }
+
+    /**
+     * 设置时区
+     *
+     * @param \DateTimeZone|string|null $timezone
+     */
+    public function withTimezone($timezone)
+    {
+        $this->timezone = $timezone;
         
         return $this;
     }
@@ -316,7 +348,9 @@ class LogViewer
      */
     public function getFileModified($filePath)
     {
-        return Carbon::parse(File::lastModified($filePath))->format('Y-m-d H:i:s');
+        return Date::parse(File::lastModified($filePath))
+            ->setTimezone($this->timezone)
+            ->format('Y-m-d H:i:s');
     }
 
     /**

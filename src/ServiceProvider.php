@@ -34,7 +34,7 @@ class ServiceProvider extends BaseServiceProvider
                 'homepage' => 'https://github.com/deatil', 
             ],
         ],
-        'version' => '1.4.0',
+        'version' => '1.4.1',
         'adaptation' => '>=1.4.0',
     ];
     

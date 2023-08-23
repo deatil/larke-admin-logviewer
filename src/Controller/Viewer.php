@@ -52,6 +52,7 @@ class Viewer extends BaseController
         $logViewer = new LogViewer();
         $files = $logViewer
             ->withPath(storage_path('logs'))
+            ->withTimezone(config('app.timezone', 'UTC'))
             ->getFiles($keywords);
         
         $list = collect($files);
