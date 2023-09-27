@@ -30,6 +30,31 @@
         }
     },
     "extra" : {
+        "larke": {
+            "title": "日志查看器",
+            "description": "Laravel 框架的日志查看器",
+            "keywords": [
+                "lake",
+                "larke",
+                "demo",
+                "admin",
+                "larke-admin",
+                "viewer",
+                "logviewer"
+            ],
+            "homepage": "https://github.com/deatil/larke-admin-logviewer",
+            "authors": [
+                {
+                    "name": "deatil",
+                    "email": "deatil@github.com",
+                    "homepage": "https://github.com/deatil",
+                    "role": "Developer"
+                }
+            ],
+            "version": "1.5.0",
+            "adaptation": ">=1.7.0",
+            "require": {}
+        },
         "laravel" : {
             "providers" : [
                 "Larke\\Admin\\LogViewer\\ServiceProvider"

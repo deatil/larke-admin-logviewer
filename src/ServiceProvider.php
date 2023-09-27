@@ -13,35 +13,17 @@ use Larke\Admin\Extension\ServiceProvider as BaseServiceProvider;
 class ServiceProvider extends BaseServiceProvider
 {
     /**
-     * 扩展信息
+     * composer
      */
-    protected $info = [
-        'name' => 'larke/log-viewer',
-        'title' => '日志查看器',
-        'description' => 'laravel的日志查看器',
-        'keywords' => [
-            'larke',
-            'larke-admin',
-            'log',
-            'viewer',
-            'logviewer',
-        ],
-        'homepage' => 'https://github.com/deatil/larke-admin-logviewer',
-        'authors' => [
-            [
-                'name' => 'deatil', 
-                'email' => 'deatil@github.com', 
-                'homepage' => 'https://github.com/deatil', 
-            ],
-        ],
-        'version' => '1.4.1',
-        'adaptation' => '>=1.4.0',
-    ];
-    
+    public $composer = __DIR__ . '/../composer.json';
+
     /**
      * 扩展图标
      */
     protected $icon = __DIR__ . '/../icon.png';
+    
+    // 包名
+    protected $pkgName = "larke/log-viewer";
     
     protected $slug = 'larke-admin.ext.log-viewer';
     
@@ -51,13 +33,10 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         // 扩展注册
-        $this->withExtension(
-            $this->info['name'], 
-            $this->withExtensionInfo(
-                __CLASS__, 
-                $this->info, 
-                $this->icon
-            )
+        $this->withExtensionFromComposer(
+            __CLASS__, 
+            $this->composer,
+            $this->icon
         );
         
         // 事件
@@ -116,35 +95,35 @@ class ServiceProvider extends BaseServiceProvider
         
         // 安装后
         $this->onInatll(function ($name, $info) use($thiz) {
-            if ($name == $thiz->info["name"]) {
+            if ($name == $thiz->pkgName) {
                 $thiz->install();
             }
         });
         
         // 卸载后
         $this->onUninstall(function ($name, $info) use($thiz) {
-            if ($name == $thiz->info["name"]) {
+            if ($name == $thiz->pkgName) {
                 $thiz->uninstall();
             }
         });
         
         // 更新后
         $this->onUpgrade(function ($name, $oldInfo, $newInfo) use($thiz) {
-            if ($name == $thiz->info["name"]) {
+            if ($name == $thiz->pkgName) {
                 $thiz->upgrade();
             }
         });
         
         // 启用后
         $this->onEnable(function ($name, $info) use($thiz) {
-            if ($name == $thiz->info["name"]) {
+            if ($name == $thiz->pkgName) {
                 $thiz->enable();
             }
         });
         
         // 禁用后
         $this->onDisable(function ($name, $info) use($thiz) {
-            if ($name == $thiz->info["name"]) {
+            if ($name == $thiz->pkgName) {
                 $thiz->disable();
             }
         });
