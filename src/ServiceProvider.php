@@ -33,7 +33,7 @@ class ServiceProvider extends BaseServiceProvider
     public function boot()
     {
         // 扩展注册
-        $this->withExtensionFromComposer(
+        $this->addExtension(
             __CLASS__, 
             $this->composer,
             $this->icon
@@ -62,11 +62,11 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function exceptSlugs()
     {
-        $this->withAuthenticateExcepts([
+        $this->addAuthenticateExcepts([
             'larke-admin.log-viewer.download',
         ]);
         
-        $this->withPermissionExcepts([
+        $this->addPermissionExcepts([
             'larke-admin.log-viewer.download',
         ]);
     }
