@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": "^8.0",
-        "lake/larke-admin":"^1.4"
+        "lake/larke-admin":"^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -51,8 +51,8 @@
                     "role": "Developer"
                 }
             ],
-            "version": "1.5.1",
-            "adaptation": ">=1.7.2",
+            "version": "2.0.0",
+            "adaptation": "^2.0",
             "require": {}
         },
         "laravel" : {
